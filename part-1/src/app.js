@@ -1,22 +1,17 @@
-const cluster = require('cluster');
-const http = require('http');
-const numCPUs = require('os').cpus().length;
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const app = express();
 
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+mongoose.connect(`mongodb://localhost:27017/challenge`, { useNewUrlParser: true, useUnifiedTopology: true });
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
-  });
-} else {
-  http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end('hello world\n');
-  }).listen(8000);
+const productRoute = require('./routes/product');
 
-  console.log(`Worker ${process.pid} started`);
-}
+app.use(productRoute);
+
+app.listen(3000, () => {
+  console.log('server is running on port 3000');
+});

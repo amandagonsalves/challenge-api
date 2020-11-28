@@ -1,3 +1,13 @@
-const product = require('./../models/product.js');
+const Product = require('./../models/product.js');
 
-console.log('hello')
+async function addProduct(body) {
+  const product = new Product({
+    body
+  });
+
+  await product.save();
+
+  return product;
+};
+
+module.exports = addProduct;

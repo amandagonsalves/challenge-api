@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const productController = require('./../controllers/product');
+const addProduct = require('../controllers/product');
 
-router.post('/v1/products', (req, res) => {
-  productController.new(req, res);/* 
-  res.send('hello'); */
+router.post('/v1/products', async (req, res) => {
+  await addProduct(req.body);
 });
 
 module.exports = router;

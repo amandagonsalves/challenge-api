@@ -61,9 +61,6 @@ describe('product controller test', () => {
 
   /* describe('checkProductHash method testing', () => {
     test('should verify that 10 minutes have passed since the last product was added', () => {
-      const hash = 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9'
-
-      expect( product.checkProductHash(hash)).toBe(false);
     });  
   }); */
 });

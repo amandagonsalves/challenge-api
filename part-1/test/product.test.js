@@ -1,9 +1,11 @@
-const product = require('../src/controllers/product');
-const Product = require('../src/models/product');
+const { saveProduct, generateHash, getMinutes, getProductByHash, checkProductHash } = require('../src/controllers/product');
+const mongoose = require('mongoose');
 
 describe('product controller test', () => {
+  mongoose.connect(`mongodb://localhost:27017/challenge`, { useNewUrlParser: true, useUnifiedTopology: true });
+
   describe('saveProduct method testing', () => {
-    test('should save the product if it has a valid body and hash', () => {
+    test('should save the product if it has a valid body and hash', async () => {
       const body = {
         name: 'mesa',
         price: 400
@@ -11,7 +13,7 @@ describe('product controller test', () => {
   
       const hash = 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9';
   
-      const savedProduct = product.saveProduct(body, hash);
+      const savedProduct = await saveProduct(body, hash);
   
       expect(savedProduct).toBeDefined();
       expect(savedProduct).toBeTruthy();
@@ -22,28 +24,22 @@ describe('product controller test', () => {
     test('should generate a hash for each product', async () => {
       const hash = 'eyJuYW1lIjoidGVzdGUiLCJwcmljZSI6MTIwfQ==';
 
-      expect(await product.generateHash({ "name": "teste", "price": 120 })).toBe(hash);
+      expect(await generateHash({ "name": "teste", "price": 120 })).toBe(hash);
     });  
   });
 
   describe('getProductByHash method testing', () => {
-    test('', async () => {
-      /* const newProduct = new Product({
-        body: {
-          name: 'mesa',
-          price: 400
-        },
-        hash: 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9'
-      });
- */
-      const newProduct = await product.saveProduct({
+    test('should get the product by its hash', async () => {
+      const newProduct = await saveProduct({
         name: 'mesa',
         price: 400
       }, 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9');
 
-      const id = newProduct._id;
+      const id = newProduct._id.toString();
+      
+      const fromHash = await getProductByHash(newProduct.hash);
 
-      expect(id).toBe(await product.getProductByHash(newProduct.hash));
+      expect(id).toBe(fromHash[0]._id.toString());
     });  
   });
   
@@ -52,15 +48,18 @@ describe('product controller test', () => {
       const currentDate = new Date(1606681548999);
       const tenMinutesEarly = new Date(currentDate - (60000 * 10));
 
-      const dateDiff = product.getMinutes(currentDate, tenMinutesEarly);
+      const dateDiff = getMinutes(currentDate, tenMinutesEarly);
       
       expect(dateDiff).toBeDefined();
       expect(dateDiff).toBe(10);
     });
   });
 
-  /* describe('checkProductHash method testing', () => {
-    test('should verify that 10 minutes have passed since the last product was added', () => {
-    });  
-  }); */
+  describe('checkProductHash method testing', () => {
+    test('should verify that 10 minutes have passed since the last product was added', async () => {
+      const hash = 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9';
+      
+      expect(await checkProductHash(hash)).toBeDefined();
+    });
+  });
 });

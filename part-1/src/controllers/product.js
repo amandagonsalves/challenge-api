@@ -35,7 +35,9 @@ async function checkProductHash(hash) {
 }
 
 module.exports = {
-  saveProduct,
+  getMinutes,
   generateHash,
+  getProductByHash,
+  saveProduct,
   checkProductHash
 }

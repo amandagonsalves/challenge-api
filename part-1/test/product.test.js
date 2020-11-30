@@ -57,9 +57,14 @@ describe('product controller test', () => {
 
   describe('checkProductHash method testing', () => {
     test('should verify that 10 minutes have passed since the last product was added', async () => {
-      const hash = 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9';
+      const newProduct = await saveProduct({
+        name: 'cadeira',
+        price: 70
+      }, 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9');
+
+      const hash = newProduct.hash;
       
-      expect(await checkProductHash(hash)).toBeDefined();
+      expect(await checkProductHash(hash)).toBe(true);
     });
   });
 });

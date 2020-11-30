@@ -29,15 +29,15 @@ async function checkProductHash(hash) {
 
   if(lastProductAdded.length > 0 && getMinutes(Date.now(), lastProductAdded[0].createdAt) < 10) {
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
 module.exports = {
-  getMinutes,
+  saveProduct,
   generateHash,
   getProductByHash,
-  saveProduct,
+  getMinutes,
   checkProductHash
 }

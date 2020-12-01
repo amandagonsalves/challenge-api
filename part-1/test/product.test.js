@@ -6,8 +6,7 @@ describe('product controller test', () => {
 
   describe('saveProduct method testing', () => {
     test('should save the product if it has a valid body and hash', async () => {
-      const body = { name: 'mesa', price: 200 }
-  
+      const body = { name: 'mesa', price: 200 }  
       const hash = 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9';
   
       const savedProduct = await saveProduct(body, hash);
@@ -27,10 +26,8 @@ describe('product controller test', () => {
 
   describe('getProductByHash method testing', () => {
     test('should get the product by its hash', async () => {
-      const newProduct = await saveProduct({ name: 'mesa', price: 400 }, 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9');
-      
-      const { _id, hash }  = newProduct;
-      
+      const newProduct = await saveProduct({ name: 'mesa', price: 400 }, 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9');      
+      const { _id, hash }  = newProduct;      
       const fromHash = await getProductByHash(hash);
 
       expect(_id.toString()).toBe(fromHash[0]._id.toString());
@@ -52,7 +49,6 @@ describe('product controller test', () => {
   describe('checkProductHash method testing', () => {
     test('should verify that 10 minutes have passed since the last product was added', async () => {
       const newProduct = await saveProduct({ name: 'cadeira', price: 70 }, 'eyJuYW1lIjoibWVzYSIsInByaWNlIjo0MDB9');
-
       const { hash } = newProduct;
       
       expect(await checkProductHash(hash)).toBe(true);

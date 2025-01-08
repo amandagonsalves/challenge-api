@@ -1,6 +1,23 @@
-# Challenge API
+# nodejs products api
 
-In this test, a web API was built using Node.js and MongoDB.
-This API is able to ignore requests with the same body in a short period of 10 minutes.
+api using nodejs and mongodb that ignores requests with the same body in a period of 10 minutes.
 
-For more information, check its README inside the part-1 folder.
+## installation
+
+1 - clone the project:
+
+```bash
+git clone git@github.com:amandagonsalves/nodejs-products-api.git
+```
+
+2 - install all dependencies, run mongoDB, then run dev:
+
+```bash
+npm install && mongod && npm run dev
+```
+
+## testing
+
+```bash
+npm test
+```
